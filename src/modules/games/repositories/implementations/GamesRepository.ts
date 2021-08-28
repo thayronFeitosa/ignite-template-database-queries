@@ -13,11 +13,11 @@ export class GamesRepository implements IGamesRepository {
   }
 
   async findByTitleContaining(param: string): Promise<Game[]> {
-    throw new Error('Method not implemented.');
-
-    // return this.repository
-    //   .createQueryBuilder()
-    //   // Complete usando query builder
+    const result = this.repository
+    .createQueryBuilder('games')
+    .where("games.title ILIKE :param", {param: `%${param}%`})
+    .getMany();
+    return result;
   }
 
   async countAllGames(): Promise<[{ count: string }]> {
