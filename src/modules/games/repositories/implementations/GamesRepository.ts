@@ -13,7 +13,7 @@ export class GamesRepository implements IGamesRepository {
   }
 
   async findByTitleContaining(param: string): Promise<Game[]> {
-    const result = this.repository
+    const result = await this.repository
     .createQueryBuilder('games')
     .where("games.title ILIKE :param", {param: `%${param}%`})
     .getMany();
@@ -21,16 +21,17 @@ export class GamesRepository implements IGamesRepository {
   }
 
   async countAllGames(): Promise<[{ count: string }]> {
-    throw new Error('Method not implemented.');
-
-    // return this.repository.query(); // Complete usando raw query
+    const countAllGames = await this.repository.query('SELECT COUNT(*) FROM games');
+    return countAllGames;
   }
 
   async findUsersByGameId(id: string): Promise<User[]> {
-    throw new Error('Method not implemented.');
 
-    // return this.repository
-    //   .createQueryBuilder()
-    //   // Complete usando query builder
+    const relarions =  await this.repository
+    .createQueryBuilder()
+    .relation("users")
+    .of(id)
+    .loadMany();
+    return relarions;
   }
 }
