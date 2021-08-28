@@ -14,17 +14,29 @@ export class UsersRepository implements IUsersRepository {
   async findUserWithGamesById({
     user_id,
   }: IFindUserWithGamesDTO): Promise<User> {
-    // Complete usando ORM
-  }
+    const userWithGames = await this.repository.findOne(user_id, {
+      relations: ["games"],
+    }) as User
+
+    return userWithGames;  }
 
   async findAllUsersOrderedByFirstName(): Promise<User[]> {
-    return this.repository.query(); // Complete usando raw query
+     const allUsersAsc = await this.repository.find({
+       order: {
+         first_name: 'ASC'
+       }
+     })
+    return allUsersAsc;
+
+    // return this.repository.query(); // Complete usando raw query
   }
 
   async findUserByFullName({
     first_name,
     last_name,
   }: IFindUserByFullNameDTO): Promise<User[] | undefined> {
-    return this.repository.query(); // Complete usando raw query
+    throw new Error('Method not implemented.');
+
+    // return this.repository.query(); // Complete usando raw query
   }
 }
